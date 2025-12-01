@@ -5,6 +5,7 @@ STRIDE GPT is an AI-powered threat modelling tool that leverages Large Language 
 ## Table of Contents
 - [Star the Repo](#star-the-repo)
 - [Features](#features)
+- [Enterprise Deployment](#enterprise-deployment)
 - [Roadmap](#roadmap)
 - [Talk at Open Security Summit](#talk-at-open-security-summit)
 - [Changelog](#changelog)
@@ -40,6 +41,17 @@ If you find STRIDE GPT useful, please consider supporting the project:
 - Environment variable support for secure configuration
 - Downloadable outputs in Markdown format for all generated content
 
+## Enterprise Deployment
+
+Want to customize STRIDE-GPT for your organization? Check out our comprehensive [Operationalization Guide](docs/operationalization-guide.md) to learn how to:
+
+- 🎯 Inject organizational security controls and standards
+- 📋 Customize threat models with your compliance requirements
+- 🔧 Fork and deploy STRIDE-GPT internally
+- 📊 Get context-aware, actionable threat models specific to your environment
+
+The guide includes step-by-step instructions, code examples, and deployment patterns for organizations looking to scale AI-powered threat modeling across their teams.
+
 ## Roadmap
 - [x] Add support for multi-modal threat modelling
 - [x] Autogenerate application descriptions based on README files in GitHub repositories
@@ -57,7 +69,17 @@ This video is an excellent resource for anyone interested in understanding how S
 
 ## Changelog
 
-### Version 0.14 (latest)
+### Version 0.14.1 (latest)
+
+- **Security Infrastructure**: Added comprehensive automated security scanning and hardening including:
+  - GitHub Actions workflows for Bandit (Python security), CodeQL (vulnerability detection), pip-audit (dependency scanning), Safety (package vulnerabilities), Gitleaks (secret detection), and Trivy (Docker image scanning)
+  - SECURITY.md with vulnerability reporting process (48-hour acknowledgment SLA) and security best practices
+  - Enhanced Docker configuration with security hardening, resource limits, and production-ready docker-compose.yml
+  - Dependabot configuration for automated weekly dependency updates
+  - Production-ready secrets management guidance (Docker Swarm secrets, cloud secret managers)
+- **Enterprise Operationalization Guide**: Added comprehensive guide for customizing STRIDE-GPT with organizational context including security controls, compliance requirements, approved technology stacks, and deployment patterns for enterprise use.
+
+### Version 0.14
 
 - **GPT-5 Series Support**: Added comprehensive support for OpenAI's GPT-5 series models (gpt-5, gpt-5-mini, gpt-5-nano) across all threat modeling features. These advanced reasoning models provide enhanced analytical capabilities with proper token allocation for both internal reasoning and output generation.
 - **Anthropic Claude 4 Integration**: Added support for Anthropic's latest Claude 4 models (claude-opus-4-1-20250805, claude-opus-4-20250514, and claude-sonnet-4-20250514) with enhanced capabilities.
@@ -279,6 +301,73 @@ Release highlights:
 3. Follow the steps in the Streamlit interface to use STRIDE GPT.
 
 Note: When you run the application (either locally or via Docker), it will automatically load the environment variables you've set in the `.env` file. This will pre-fill the API keys in the application interface.
+
+## Security Best Practices
+
+STRIDE GPT is designed for local, single-user deployment. When using the tool:
+
+### Protecting Your API Keys
+
+**Your API keys are sensitive credentials that can incur charges on your account.**
+
+✅ **DO:**
+- Enter API keys through the UI (they stay in your browser session)
+- Use .env file for convenience on your personal machine
+- Set spending limits in your LLM provider dashboard
+- Regularly review your API usage and costs
+- Clear session when using on shared computers
+
+❌ **DON'T:**
+- Commit .env files to version control (already in .gitignore)
+- Share screenshots with API keys visible
+- Run STRIDE GPT on untrusted/compromised systems
+- Share your API keys with others
+- Ignore unexpected API charges
+
+### Data Privacy Considerations
+
+When you generate threat models, STRIDE GPT sends data to your chosen LLM provider:
+- Application details (type, authentication methods, architecture)
+- System architecture descriptions
+- Uploaded architecture diagrams/images
+- Generated threat models and mitigations
+
+**What this means:**
+- OpenAI, Anthropic, Google, etc. may log this data per their privacy policies
+- Consider using generic/fictional system details for demonstrations
+- Review your LLM provider's data retention and privacy policies
+- For sensitive systems, consider:
+  - Using local models (Ollama, LM Studio)
+  - Using providers with stricter privacy guarantees
+  - Sanitizing system descriptions before input
+
+### For Team/Organization Deployments
+
+If deploying STRIDE GPT for multiple users (not the default use case):
+- Add authentication/authorization (not included by default)
+- Use a secrets management service for API keys
+- Deploy behind VPN or internal network
+- Review the [SECURITY.md](SECURITY.md) document for additional considerations
+- Consider data residency and compliance requirements
+- Implement appropriate access controls for generated threat models
+
+### Dependency Security
+
+We maintain dependencies and monitor for vulnerabilities:
+- Dependencies are updated regularly via Dependabot
+- Automated security scanning runs on every commit
+- Security advisories are tracked in GitHub Security tab
+- Run `pip-audit` to check for known vulnerabilities locally
+
+See [SECURITY.md](SECURITY.md) for comprehensive security information including automated security scanning, vulnerability reporting, and secure development practices.
+
+### Reporting Security Issues
+
+Found a security issue? Please report it responsibly:
+- Create a security advisory via GitHub's [private vulnerability reporting](https://github.com/mrwadams/stride-gpt/security/advisories/new)
+- Don't post security issues publicly
+- We'll acknowledge within 48 hours
+- Fixes will be prioritized and released quickly
 
 ## Contributing
 
